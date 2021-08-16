@@ -1,0 +1,126 @@
+{% extends 'bases/admin_base.html' %}
+{% load bootstrap_icons %}
+
+{% block content %}
+    <style>
+        #search:focus {
+            outline: none !important;
+          }
+    </style>
+    <div class="flex items-end justify-end px-5 pb-5">
+      <form method="GET" class="p-1 w-8/12">
+              <span class="px-4 py-2 flex items-center text-base rounded-full text-grey-600 bg-gray-200">
+                <i class="p-2">{% bs_icon 'search' color='black' size='1em' %}</i>
+                <input type="search" id="search" class="p-2 text-blue text-bold bg-transparent border-none w-full" placeholder="Search...">
+              </span>
+      </form>
+      <div class="p-1 w-2/12">
+          <a href="#">
+              <span class="px-4 py-3 flex justify-center items-center text-base rounded-full text-gray-900 bg-gray-200">
+                <i class="p-2">{% bs_icon 'plus-circle-fill' color='gray' size='1em' %}</i>
+                  <h1 class="p-1"><strong>User</strong></h1>
+              </span>
+          </a>
+      </div>
+    <div class="p-1 w-2/12">
+      <a href="#">
+          <span class="px-4 py-3 flex justify-center items-center text-base rounded-full text-gray-900 bg-gray-200">
+            <i class="p-2">{% bs_icon 'plus-circle-fill' color='gray' size='1em' %}</i>
+              <h1 class="p-1"><strong>Employee</strong></h1>
+          </span>
+      </a>
+    </div>
+
+
+    </div>
+<div class="flex flex-col flex-auto px-5">
+    <div class="py-0">
+        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-1 overflow-x-auto">
+            <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                User
+                            </th>
+                            <th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                Role
+                            </th>
+                            <th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                Created at
+                            </th>
+                            <th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                status
+                            </th>
+                            <th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                Location
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+
+
+                    <tr class="bg-white hover:bg-gray-100" onclick="window.location='{% url 'view_user' pk=user.pk %}'">
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <a href="{% url 'view_user' pk=user.profile.pk %}" class="block relative">
+                                                <img src="{{ user.profile.profileIMG.url }}" class="object-cover rounded-full h-10 w-10"/>
+                                            </a>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-gray-900 whitespace-no-wrap">
+                                                {{ user.first_name }} {{ user.last_name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {% if user.is_superuser %}
+                                            Admin
+                                        {% elif user.is_staff %}
+                                            Employee
+                                        {% else %}
+                                            Customer
+                                        {% endif %}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                        {{ user.date_joined }}
+                                    </p>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                        <span aria-hidden="true" class="absolute inset-0 bg-green-200 opacity-50 rounded-full">
+                                        </span>
+                                        <span class="relative">
+                                            {% if user.is_active %}
+                                                Active
+                                            {% else %}
+                                                Not Active
+                                            {% endif %}
+                                        </span>
+                                    </span>
+                                </td>
+                                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                    {{ user.profile.location }}
+                                </td>
+                            </tr>
+
+
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
